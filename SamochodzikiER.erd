@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="SamochodzikiER.erd">
+	<entities>
+		<data-source id="mariaDB-19539257021-218875024b3844dc">
+			<entity id="1" name="czesci" fq-name="samochodziki.czesci" order="0" x="779" y="533">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="2" name="klienci" fq-name="samochodziki.klienci" order="1" x="66" y="275">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="3" name="pojazdy" fq-name="samochodziki.pojazdy" order="2" x="548" y="226">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="4" name="pracownicy" fq-name="samochodziki.pracownicy" order="3" x="63" y="65">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="5" name="pracownicyserwis" fq-name="samochodziki.pracownicyserwis" order="4" x="421" y="68">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="6" name="rezerwacje" fq-name="samochodziki.rezerwacje" order="5" x="344" y="504">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="7" name="serwis" fq-name="samochodziki.serwis" order="6" x="770" y="73">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="8" name="serwisczesci" fq-name="samochodziki.serwisczesci" order="7" x="773" y="328">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="9" name="transakcje" fq-name="samochodziki.transakcje" order="8" x="343" y="251">
+				<path name="samochodziki"/>
+			</entity>
+		</data-source>
+	</entities>
+	<relations>
+		<relation name="serwisczesci_ibfk_2" fq-name="samochodziki.serwisczesci.serwisczesci_ibfk_2" type="fk" pk-ref="1" fk-ref="8"/>
+		<relation name="rezerwacje_ibfk_1" fq-name="samochodziki.rezerwacje.rezerwacje_ibfk_1" type="fk" pk-ref="2" fk-ref="6"/>
+		<relation name="transakcje_ibfk_1" fq-name="samochodziki.transakcje.transakcje_ibfk_1" type="fk" pk-ref="2" fk-ref="9"/>
+		<relation name="rezerwacje_ibfk_2" fq-name="samochodziki.rezerwacje.rezerwacje_ibfk_2" type="fk" pk-ref="3" fk-ref="6"/>
+		<relation name="serwis_ibfk_1" fq-name="samochodziki.serwis.serwis_ibfk_1" type="fk" pk-ref="3" fk-ref="7"/>
+		<relation name="transakcje_ibfk_2" fq-name="samochodziki.transakcje.transakcje_ibfk_2" type="fk" pk-ref="3" fk-ref="9"/>
+		<relation name="pracownicyserwis_ibfk_1" fq-name="samochodziki.pracownicyserwis.pracownicyserwis_ibfk_1" type="fk" pk-ref="4" fk-ref="5"/>
+		<relation name="transakcje_ibfk_3" fq-name="samochodziki.transakcje.transakcje_ibfk_3" type="fk" pk-ref="4" fk-ref="9"/>
+		<relation name="pracownicyserwis_ibfk_2" fq-name="samochodziki.pracownicyserwis.pracownicyserwis_ibfk_2" type="fk" pk-ref="7" fk-ref="5"/>
+		<relation name="serwisczesci_ibfk_1" fq-name="samochodziki.serwisczesci.serwisczesci_ibfk_1" type="fk" pk-ref="7" fk-ref="8"/>
+	</relations>
+</diagram>

@@ -1,0 +1,165 @@
+### 1. Tabela `Pojazdy` (Vehicles)
+
+- **VehicleID** (Primary Key, INT, Auto Increment)
+
+- **Marka** (VARCHAR(50))
+
+- **Model** (VARCHAR(50))
+
+- **RokProdukcji** (YEAR)
+
+- **VIN** (VARCHAR(17), Unique)
+
+- **Przebieg** (INT)
+
+- **Kolor** (VARCHAR(30))
+
+- **Cena** (DECIMAL(10, 2))
+
+- **Status** (ENUM('Dostępny', 'Sprzedany', 'W naprawie', 'Zarezerwowany'))
+
+---
+
+### 2. Tabela `Klienci` (Customers)
+
+- **CustomerID** (Primary Key, INT, Auto Increment)
+
+- **Imie** (VARCHAR(50))
+
+- **Nazwisko** (VARCHAR(50))
+
+- **Email** (VARCHAR(100), Unique)
+
+- **Telefon** (VARCHAR(15))
+
+- **Adres** (VARCHAR(255))
+
+---
+
+### 3. Tabela `Pracownicy` (Employees)
+
+- **EmployeeID** (Primary Key, INT, Auto Increment)
+
+- **Imie** (VARCHAR(50))
+
+- **Nazwisko** (VARCHAR(50))
+
+- **Stanowisko** (VARCHAR(100))
+
+- **Email** (VARCHAR(100), Unique)
+
+- **Telefon** (VARCHAR(15))
+
+- **Dostepny** (BOOL)
+
+---
+
+### 4. Tabela `Transakcje` (Transactions)
+
+- **TransactionID** (Primary Key, INT, Auto Increment)
+
+- **CustomerID** (INT, Foreign Key references `Klienci.CustomerID`)
+
+- **VehicleID** (INT, Foreign Key references `Pojazdy.VehicleID`)
+
+- **EmployeeID** (INT, Foreign Key references `Pracownicy.EmployeeID`)
+
+- **DataTransakcji** (TIMESTAMP)
+
+- **Kwota** (DECIMAL(10, 2))
+
+- **TypTransakcji** (ENUM('Sprzedaż', 'Serwis', 'Rezerwacja'))
+
+---
+
+### 5. Tabela `Serwis` (Service)
+
+- **ServiceID** (Primary Key, INT, Auto Increment)
+
+- **VehicleID** (INT, Foreign Key references `Pojazdy.VehicleID`)
+
+- **OpisProblemu** (TEXT)
+
+- **DataPrzyjecia** (DATETIME)
+
+- **DataZakonczenia** (DATETIME)
+
+- **Koszt** (DECIMAL(10, 2))
+
+- **Status** (ENUM('W trakcie', 'Zakończony', 'Anulowany'))
+
+---
+
+### 6. Tabela `Części` (Parts)
+
+- **PartID** (Primary Key, INT, Auto Increment)
+
+- **Nazwa** (VARCHAR(100))
+
+- **Producent** (VARCHAR(100))
+
+- **Cena** (DECIMAL(10, 2))
+
+- **IloscNaStanie** (INT)
+
+---
+
+### 7. Tabela `SerwisCzęści` (ServiceParts) – **Tabela łącznikowa**
+
+- **ServicePartID** (Primary Key, INT, Auto Increment)
+
+- **ServiceID** (INT, Foreign Key references `Serwis.ServiceID`)
+
+- **PartID** (INT, Foreign Key references `Części.PartID`)
+
+- **Ilosc** (INT)
+
+---
+
+### 8. Tabela `Rezerwacje` (Reservations)
+
+- **ReservationID** (Primary Key, INT, Auto Increment)
+
+- **CustomerID** (INT, Foreign Key references `Klienci.CustomerID`)
+
+- **VehicleID** (INT, Foreign Key references `Pojazdy.VehicleID`)
+
+- **DataRezerwacji** (DATETIME)
+
+- **DataWygasniecia** (DATETIME)
+
+- **Status** (ENUM('Aktywna', 'Anulowana', 'Zrealizowana'))
+
+---
+
+### 9. Tabela `PracownicySerwis` (EmployeeService) – **Tabela łącznikowa**
+
+- **EmployeeServiceID** (Primary Key, INT, Auto Increment)
+
+- **EmployeeID** (INT, Foreign Key references `Pracownicy.EmployeeID`)
+
+- **ServiceID** (INT, Foreign Key references `Serwis.ServiceID`)
+
+- **Rola** (VARCHAR(50)) – np. "Mechanik", "Kierownik serwisu"
+
+---
+
+### Relacje między tabelami:
+
+1. **Pojazdy** mogą być powiązane z wieloma **Transakcjami** i **Serwisami**.
+
+2. **Klienci** mogą mieć wiele **Transakcji** i **Rezerwacji**.
+
+3. **Pracownicy** mogą być przypisani do wielu **Transakcji** i **Serwisów** (poprzez tabelę łącznikową `PracownicySerwis`).
+
+4. **Części** mogą być używane w wielu **Serwisach** (poprzez tabelę łącznikową `SerwisCzęści`).
+
+---
+
+### Przykładowe zastosowanie:
+
+- **Tabela łącznikowa `SerwisCzęści`** pozwala na śledzenie, które części zostały użyte w danym serwisie.
+
+- **Tabela łącznikowa `PracownicySerwis`** umożliwia przypisanie wielu pracowników do jednego serwisu (np. mechaników, kierowników).
+
+Ta struktura jest bardziej zwarta, ale nadal zapewnia elastyczność w zarządzaniu danymi firmy samochodowej.
