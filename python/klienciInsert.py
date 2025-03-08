@@ -5,8 +5,8 @@ imiona = ["Adam", "Maria", "Piotr", "Anna", "Krzysztof", "Ewa", "Tomasz", "Zofia
 nazwiska = ["Kowalski", "Nowak", "Wisniewski", "Wojcik", "Kowalczyk", "Zielinski", "Szymanski", "Dabrowski", "Jankowski", "Kaminski", "Lewandowski", "Zajac", "Piotrowski", "Kwiatkowski", "Mazur", "Krol", "Wieczorek", "Nowacki", "Adamczak", "Pawlak"]
 
 # Lista miast oraz ulic
-miasta = ["Warszawa", "Krakow", "Wroclaw", "Gdansk", "Łodz", "Poznan", "Szczecin", "Lublin", "Katowice", "Bydgoszcz"]
-ulice = ["ul. Warszawska", "ul. Krakowska", "ul. Pieciomorgowa", "ul. Gdanska", "ul. Łodzka", "ul. Poznanska", "ul. Wroclawska", "ul. Slowianska", "ul. Zielona", "ul. Gornicza"]
+miasta = ["Warszawa", "Krakow", "Wroclaw", "Gdansk", "Lodz", "Poznan", "Szczecin", "Lublin", "Katowice", "Bydgoszcz"]
+ulice = ["ul. Warszawska", "ul. Krakowska", "ul. Pieciomorgowa", "ul. Gdanska", "ul. Lodzka", "ul. Poznanska", "ul. Wroclawska", "ul. Slowianska", "ul. Zielona", "ul. Gornicza"]
 
 # Funkcja do generowania losowego numeru telefonu
 def generate_phone_number():

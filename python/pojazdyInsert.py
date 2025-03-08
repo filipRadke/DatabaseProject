@@ -4,8 +4,8 @@ import string
 # Lista losowych marek, modeli, kolorów
 marki = ["Toyota", "Volkswagen", "BMW", "Mercedes", "Audi", "Ford", "Renault", "Peugeot", "Opel", "Fiat"]
 modele = ["Corolla", "Golf", "X5", "A4", "Passat", "Focus", "Clio", "308", "Astra", "Punto"]
-kolory = ["Czarny", "Biały", "Srebrny", "Niebieski", "Czerwony", "Zielony", "Szary", "Beżowy", "Żółty", "Brązowy"]
-statusy = ["Dostępny", "Sprzedany", "W naprawie", "Zarezerwowany"]
+kolory = ["Czarny", "Bialy", "Srebrny", "Niebieski", "Czerwony", "Zielony", "Szary", "Bezowy", "Zolty", "Brazowy"]
+statusy = ["Dostepny", "Sprzedany", "W naprawie", "Zarezerwowany"]
 
 # Funkcja generująca losowy numer VIN
 def generate_vin():
@@ -18,7 +18,7 @@ def generate_sql_file(filename, rows):
         for i in range(rows):
             marka = random.choice(marki)
             model = random.choice(modele)
-            rok_produkcji = random.randint(1900, 2025)
+            rok_produkcji = random.randint(1901, 2025)
             vin = generate_vin()  # Losowy numer VIN
             przebieg = random.randint(0, 300000)  # Losowy przebieg
             kolor = random.choice(kolory)  # Losowy kolor
