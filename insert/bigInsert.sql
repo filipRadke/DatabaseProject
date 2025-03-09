@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `rezerwacje` (
   PRIMARY KEY (`RezerwacjaID`),
   KEY `KlientID1` (`KlientID`),
   KEY `PojazdID1` (`PojazdID`),
-  CONSTRAINT `KlientID1` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`),
+  CONSTRAINT `KlientID1` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`) on delete restrict,
   CONSTRAINT `PojazdID1` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -102,6 +102,7 @@ CREATE TABLE IF NOT EXISTS `rezerwacje` (
 CREATE TABLE IF NOT EXISTS `serwis` (
   `SerwisID` int(11) NOT NULL AUTO_INCREMENT,
   `PojazdID` int(11) DEFAULT NULL,
+  `PracownikID` int(11) DEFAULT NULL,
   `OpisProblemu` text DEFAULT NULL,
   `DataPrzyjecia` datetime DEFAULT NULL,
   `DataZakonczenia` datetime DEFAULT NULL,
@@ -109,7 +110,9 @@ CREATE TABLE IF NOT EXISTS `serwis` (
   `Status` enum('W trakcie','Zakonczony','Anulowany') DEFAULT NULL,
   PRIMARY KEY (`SerwisID`),
   KEY `PojazdID2` (`PojazdID`),
-  CONSTRAINT `PojazdID2` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`)
+  KEY `PracownikID` (`PracownikID`),
+  CONSTRAINT `PracownikID` FOREIGN KEY (`PracownikID`) REFERENCES `pracownicy` (`PracownikID`),
+  CONSTRAINT `PojazdID2` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`) on delete cascade
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Eksport danych został odznaczony.
@@ -123,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `serwisczesci` (
   PRIMARY KEY (`SerwiscCzescID`),
   KEY `SerwisID` (`SerwisID`),
   KEY `CzescID` (`CzescID`),
-  CONSTRAINT `SerwisID` FOREIGN KEY (`SerwisID`) REFERENCES `serwis` (`SerwisID`),
+  CONSTRAINT `SerwisID` FOREIGN KEY (`SerwisID`) REFERENCES `serwis` (`SerwisID`) on delete cascade,
   CONSTRAINT `CzescID` FOREIGN KEY (`CzescID`) REFERENCES `czesci` (`CzescID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -134,17 +137,14 @@ CREATE TABLE IF NOT EXISTS `transakcje` (
   `TransakcjaID` int(11) NOT NULL AUTO_INCREMENT,
   `KlientID` int(11) DEFAULT NULL,
   `PojazdID` int(11) DEFAULT NULL,
-  `PracownikID` int(11) DEFAULT NULL,
   `DataTransakcji` timestamp NULL DEFAULT current_timestamp(),
   `Kwota` decimal(10,2) DEFAULT NULL,
   `TypTransakcji` enum('Sprzedaż','Serwis','Rezerwacja') DEFAULT NULL,
   PRIMARY KEY (`TransakcjaID`),
   KEY `KlientID2` (`KlientID`),
   KEY `PojazdID` (`PojazdID`),
-  KEY `PracownikID3` (`PracownikID`),
-  CONSTRAINT `KlientID2` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`),
-  CONSTRAINT `PojazdID3` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`),
-  CONSTRAINT `PracownikID` FOREIGN KEY (`PracownikID`) REFERENCES `pracownicy` (`PracownikID`)
+  CONSTRAINT `KlientID2` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`) on delete restrict,
+  CONSTRAINT `PojazdID3` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`) on delete restrict,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `temporaryTable` (
