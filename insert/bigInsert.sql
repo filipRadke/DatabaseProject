@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `klienci` (
 -- Eksport danych został odznaczony.
 
 -- Zrzut struktury tabela samochodziki.pojazdy
-CREATE TABLE IF NOT EXISTS `pojazdy` (
+CREATE TABLE IF NOT EXISTS `samochody` (
   `PojazdID` int(11) NOT NULL AUTO_INCREMENT,
   `Marka` varchar(50) DEFAULT NULL,
   `Model` varchar(50) DEFAULT NULL,
@@ -55,8 +55,15 @@ CREATE TABLE IF NOT EXISTS `pojazdy` (
   `Kolor` varchar(30) DEFAULT NULL,
   `Cena` decimal(10,2) DEFAULT NULL,
   `Status` enum('Dostepny','Sprzedany','W naprawie','Zarezerwowany') DEFAULT NULL,
-  PRIMARY KEY (`PojazdID`)
+  PRIMARY KEY (`PojazdID`, `VIN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `samochody`
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`PojazdID`),
+ADD UNIQUE (`VIN`);
+
+RENAME TABLE `samochody` TO `pojazdy`;
 
 -- Eksport danych został odznaczony.
 
@@ -139,6 +146,19 @@ CREATE TABLE IF NOT EXISTS `transakcje` (
   CONSTRAINT `PojazdID3` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`),
   CONSTRAINT `PracownikID` FOREIGN KEY (`PracownikID`) REFERENCES `pracownicy` (`PracownikID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `temporaryTable` (
+  'ID' int(11) NOT NULL AUTO_INCREMENT,
+  'Imie' varchar(50) DEFAULT NULL,
+  'Nazwisko' varchar(50) DEFAULT NULL
+)
+
+insert into temporaryTable (Imie, Nazwisko) values ('Jan', 'Kowalski');
+insert into temporaryTable (Imie, Nazwisko) values ('Adam', 'Nowak');
+
+truncate table temporaryTable;
+
+DROP TABLE temporaryTable;
 
 -- Eksport danych został odznaczony.
 
