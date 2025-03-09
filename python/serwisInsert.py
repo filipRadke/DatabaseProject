@@ -14,8 +14,8 @@ problemy = ['Wymiana opon','Naprawa silnika','Wymiana klockow hamulcowych','Uste
 def generate_sql_file(filename, rows):
     with open(filename, 'w') as file:
         for i in range(rows):
-            pojazd_id = random.randint(0,2500)
-            pracownik_id = random.randint(0,500)
+            pojazd_id = random.randint(1,2500)
+            pracownik_id = random.randint(1,500)
             problem = random.choice(problemy)
             data_przyjecia = losowa_data(2020,2022)
             data_zakonczenia = losowa_data(2023,2024)

@@ -12,8 +12,8 @@ statusy = ["Aktywna","Anulowana","Zrealizowana"]
 def generate_sql_file(filename, rows):
     with open(filename, 'w') as file:
         for i in range(rows):
-            klient_id = random.randint(0,2500)
-            pojazd_id = random.randint(0,2500)
+            klient_id = random.randint(1,2500)
+            pojazd_id = random.randint(1,2500)
             data_rezerwacji = losowa_data(2020,2025)
             data_wygasniecia = losowa_data(2026,2030)
             status = random.choice(statusy)

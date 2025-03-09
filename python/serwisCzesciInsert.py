@@ -4,8 +4,8 @@ import random
 def generate_sql_file(filename, rows):
     with open(filename, 'w') as file:
         for i in range(rows):
-            serwis_id = random.randint(0,1000)
-            czesc_id = random.randint(0,500)
+            serwis_id = random.randint(1,1000)
+            czesc_id = random.randint(1,500)
             ilosc = random.randint(0,10)
             
             # Wpis do tabeli

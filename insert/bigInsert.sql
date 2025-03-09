@@ -95,8 +95,8 @@ CREATE TABLE IF NOT EXISTS `rezerwacje` (
   PRIMARY KEY (`RezerwacjaID`),
   KEY `KlientID1` (`KlientID`),
   KEY `PojazdID1` (`PojazdID`),
-  CONSTRAINT `KlientID1` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`),
-  CONSTRAINT `PojazdID1` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`)
+  CONSTRAINT `KlientID1` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`) on delete cascade,
+  CONSTRAINT `PojazdID1` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`) on delete cascade
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Eksport danych został odznaczony.
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `serwis` (
   KEY `PojazdID2` (`PojazdID`),
   KEY `PracownikID` (`PracownikID`),
   CONSTRAINT `PracownikID` FOREIGN KEY (`PracownikID`) REFERENCES `pracownicy` (`PracownikID`),
-  CONSTRAINT `PojazdID2` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`)
+  CONSTRAINT `PojazdID2` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`) on delete cascade
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Eksport danych został odznaczony.
@@ -129,8 +129,8 @@ CREATE TABLE IF NOT EXISTS `serwisczesci` (
   PRIMARY KEY (`SerwiscCzescID`),
   KEY `SerwisID` (`SerwisID`),
   KEY `CzescID` (`CzescID`),
-  CONSTRAINT `SerwisID` FOREIGN KEY (`SerwisID`) REFERENCES `serwis` (`SerwisID`),
-  CONSTRAINT `CzescID` FOREIGN KEY (`CzescID`) REFERENCES `czesci` (`CzescID`)
+  CONSTRAINT `SerwisID` FOREIGN KEY (`SerwisID`) REFERENCES `serwis` (`SerwisID`) on delete cascade,
+  CONSTRAINT `CzescID` FOREIGN KEY (`CzescID`) REFERENCES `czesci` (`CzescID`) on delete cascade
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Eksport danych został odznaczony.
@@ -161,6 +161,15 @@ Insert into temporaryTable ( Imie) values ('Jan');
 truncate table temporaryTable;
 
 DROP TABLE temporaryTable;
+
+CREATE INDEX `idx_czescid` ON `czesci` (`CzescID`);
+CREATE INDEX `idx_klientid` ON `klienci` (`KlientID`);
+CREATE INDEX `idx_pojazdid` ON `pojazdy` (`PojazdID`);
+CREATE INDEX `idx_pracownikid` ON `pracownicy` (`PracownikID`);
+CREATE INDEX `idx_rezerwacjaid` ON `rezerwacje` (`RezerwacjaID`);
+CREATE INDEX `idx_serwisid` ON `serwis` (`SerwisID`);
+CREATE INDEX `idx_serwisczescid` ON `serwisczesci` (`SerwiscCzescID`);
+CREATE INDEX `idx_transakcjaid` ON `transakcje` (`TransakcjaID`);
 
 -- Eksport danych został odznaczony.
 
@@ -9551,7 +9560,7 @@ INSERT INTO rezerwacje (KlientID, PojazdID, DataRezerwacji, DataWygasniecia, Sta
 INSERT INTO rezerwacje (KlientID, PojazdID, DataRezerwacji, DataWygasniecia, Status) VALUES (887, 1055, '2023-06-22', '2026-05-14', 'Zrealizowana');
 INSERT INTO rezerwacje (KlientID, PojazdID, DataRezerwacji, DataWygasniecia, Status) VALUES (474, 2453, '2024-06-12', '2027-11-25', 'Aktywna');
 INSERT INTO rezerwacje (KlientID, PojazdID, DataRezerwacji, DataWygasniecia, Status) VALUES (1629, 2369, '2020-06-06', '2029-01-11', 'Aktywna');
-INSERT INTO rezerwacje (KlientID, PojazdID, DataRezerwacji, DataWygasniecia, Status) VALUES (0, 962, '2022-02-12', '2029-11-14', 'Aktywna');
+INSERT INTO rezerwacje (KlientID, PojazdID, DataRezerwacji, DataWygasniecia, Status) VALUES (1, 962, '2022-02-12', '2029-11-14', 'Aktywna');
 INSERT INTO rezerwacje (KlientID, PojazdID, DataRezerwacji, DataWygasniecia, Status) VALUES (2482, 2275, '2020-08-21', '2026-10-30', 'Anulowana');
 INSERT INTO rezerwacje (KlientID, PojazdID, DataRezerwacji, DataWygasniecia, Status) VALUES (945, 146, '2024-02-14', '2028-06-24', 'Zrealizowana');
 INSERT INTO rezerwacje (KlientID, PojazdID, DataRezerwacji, DataWygasniecia, Status) VALUES (1203, 1156, '2023-03-28', '2030-07-03', 'Zrealizowana');
@@ -11015,7 +11024,7 @@ INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (429, 395, 10);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (239, 449, 9);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (457, 239, 4);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (853, 115, 4);
-INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (0, 61, 6);
+INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (1, 61, 6);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (120, 143, 10);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (922, 74, 3);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (626, 224, 10);
@@ -12024,7 +12033,7 @@ INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (72, 386, 6);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (933, 235, 6);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (295, 247, 3);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (956, 30, 2);
-INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (0, 115, 9);
+INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (1, 115, 9);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (362, 372, 10);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (664, 66, 7);
 INSERT INTO serwisczesci (SerwisID,CzescID,Ilosc) VALUES (962, 22, 0);
@@ -14795,7 +14804,7 @@ INSERT INTO transakcje (KlientID,PojazdID,Kwota,TypTransakcji) VALUES (93, 2419,
 INSERT INTO transakcje (KlientID,PojazdID,Kwota,TypTransakcji) VALUES (2130, 482, 1272, 'Rezerwacja');
 INSERT INTO transakcje (KlientID,PojazdID,Kwota,TypTransakcji) VALUES (2115, 1640, 7947, 'Rezerwacja');
 INSERT INTO transakcje (KlientID,PojazdID,Kwota,TypTransakcji) VALUES (813, 2054, 1439, 'Serwis');
-INSERT INTO transakcje (KlientID,PojazdID,Kwota,TypTransakcji) VALUES (0, 965, 8098, 'Rezerwacja');
+INSERT INTO transakcje (KlientID,PojazdID,Kwota,TypTransakcji) VALUES (1, 965, 8098, 'Rezerwacja');
 INSERT INTO transakcje (KlientID,PojazdID,Kwota,TypTransakcji) VALUES (1074, 1566, 2099, 'Rezerwacja');
 INSERT INTO transakcje (KlientID,PojazdID,Kwota,TypTransakcji) VALUES (55, 2351, 2836, 'Sprzedaz');
 INSERT INTO transakcje (KlientID,PojazdID,Kwota,TypTransakcji) VALUES (405, 779, 9355, 'Rezerwacja');

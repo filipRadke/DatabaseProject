@@ -38,15 +38,14 @@ CREATE TABLE IF NOT EXISTS `klienci` (
   `Nazwisko` varchar(50) DEFAULT NULL,
   `Email` varchar(100) DEFAULT NULL,
   `Telefon` varchar(15) DEFAULT NULL,
-  `Adres` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`KlientID`),
-  UNIQUE KEY `Email` (`Email`)
+  `Adres` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`KlientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Eksport danych został odznaczony.
 
 -- Zrzut struktury tabela samochodziki.pojazdy
-CREATE TABLE IF NOT EXISTS `pojazdy` (
+CREATE TABLE IF NOT EXISTS `samochody` (
   `PojazdID` int(11) NOT NULL AUTO_INCREMENT,
   `Marka` varchar(50) DEFAULT NULL,
   `Model` varchar(50) DEFAULT NULL,
@@ -55,10 +54,19 @@ CREATE TABLE IF NOT EXISTS `pojazdy` (
   `Przebieg` int(11) DEFAULT NULL,
   `Kolor` varchar(30) DEFAULT NULL,
   `Cena` decimal(10,2) DEFAULT NULL,
-  `Status` enum('Dostępny','Sprzedany','W naprawie','Zarezerwowany') DEFAULT NULL,
-  PRIMARY KEY (`PojazdID`),
-  UNIQUE KEY `VIN` (`VIN`)
+  `Status` enum('Dostepny','Sprzedany','W naprawie','Zarezerwowany') DEFAULT NULL,
+  PRIMARY KEY (`PojazdID`, `VIN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+ALTER TABLE `samochody`
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`PojazdID`),
+ADD UNIQUE (`VIN`);
+
+
+RENAME TABLE `samochody` TO `pojazdy`;
+
 
 -- Eksport danych został odznaczony.
 
@@ -71,8 +79,7 @@ CREATE TABLE IF NOT EXISTS `pracownicy` (
   `Email` varchar(100) DEFAULT NULL,
   `Telefon` varchar(15) DEFAULT NULL,
   `Dostepny` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`PracownikID`),
-  UNIQUE KEY `Email` (`Email`)
+  PRIMARY KEY (`PracownikID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Eksport danych został odznaczony.
@@ -86,10 +93,10 @@ CREATE TABLE IF NOT EXISTS `rezerwacje` (
   `DataWygasniecia` datetime DEFAULT NULL,
   `Status` enum('Aktywna','Anulowana','Zrealizowana') DEFAULT NULL,
   PRIMARY KEY (`RezerwacjaID`),
-  KEY `KlientID` (`KlientID`),
-  KEY `PojazdID` (`PojazdID`),
-  CONSTRAINT `rezerwacje_ibfk_1` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`),
-  CONSTRAINT `rezerwacje_ibfk_2` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`)
+  KEY `KlientID1` (`KlientID`),
+  KEY `PojazdID1` (`PojazdID`),
+  CONSTRAINT `KlientID1` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`) on delete cascade,
+  CONSTRAINT `PojazdID1` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Eksport danych został odznaczony.
@@ -98,14 +105,17 @@ CREATE TABLE IF NOT EXISTS `rezerwacje` (
 CREATE TABLE IF NOT EXISTS `serwis` (
   `SerwisID` int(11) NOT NULL AUTO_INCREMENT,
   `PojazdID` int(11) DEFAULT NULL,
+  `PracownikID` int(11) DEFAULT NULL,
   `OpisProblemu` text DEFAULT NULL,
   `DataPrzyjecia` datetime DEFAULT NULL,
   `DataZakonczenia` datetime DEFAULT NULL,
   `Koszt` decimal(10,2) DEFAULT NULL,
-  `Status` enum('W trakcie','Zakończony','Anulowany') DEFAULT NULL,
+  `Status` enum('W trakcie','Zakonczony','Anulowany') DEFAULT NULL,
   PRIMARY KEY (`SerwisID`),
-  KEY `PojazdID` (`PojazdID`),
-  CONSTRAINT `serwis_ibfk_1` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`)
+  KEY `PojazdID2` (`PojazdID`),
+  KEY `PracownikID` (`PracownikID`),
+  CONSTRAINT `PracownikID` FOREIGN KEY (`PracownikID`) REFERENCES `pracownicy` (`PracownikID`),
+  CONSTRAINT `PojazdID2` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`) on delete cascade
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Eksport danych został odznaczony.
@@ -119,8 +129,8 @@ CREATE TABLE IF NOT EXISTS `serwisczesci` (
   PRIMARY KEY (`SerwiscCzescID`),
   KEY `SerwisID` (`SerwisID`),
   KEY `CzescID` (`CzescID`),
-  CONSTRAINT `serwisczesci_ibfk_1` FOREIGN KEY (`SerwisID`) REFERENCES `serwis` (`SerwisID`),
-  CONSTRAINT `serwisczesci_ibfk_2` FOREIGN KEY (`CzescID`) REFERENCES `czesci` (`CzescID`)
+  CONSTRAINT `SerwisID` FOREIGN KEY (`SerwisID`) REFERENCES `serwis` (`SerwisID`) on delete cascade,
+  CONSTRAINT `CzescID` FOREIGN KEY (`CzescID`) REFERENCES `czesci` (`CzescID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Eksport danych został odznaczony.
@@ -130,18 +140,36 @@ CREATE TABLE IF NOT EXISTS `transakcje` (
   `TransakcjaID` int(11) NOT NULL AUTO_INCREMENT,
   `KlientID` int(11) DEFAULT NULL,
   `PojazdID` int(11) DEFAULT NULL,
-  `PracownikID` int(11) DEFAULT NULL,
   `DataTransakcji` timestamp NULL DEFAULT current_timestamp(),
   `Kwota` decimal(10,2) DEFAULT NULL,
   `TypTransakcji` enum('Sprzedaż','Serwis','Rezerwacja') DEFAULT NULL,
   PRIMARY KEY (`TransakcjaID`),
-  KEY `KlientID` (`KlientID`),
-  KEY `PojazdID` (`PojazdID`),
-  KEY `PracownikID` (`PracownikID`),
-  CONSTRAINT `transakcje_ibfk_1` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`),
-  CONSTRAINT `transakcje_ibfk_2` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`),
-  CONSTRAINT `transakcje_ibfk_3` FOREIGN KEY (`PracownikID`) REFERENCES `pracownicy` (`PracownikID`)
+  KEY `KlientID2` (`KlientID`),
+  KEY `PojazdID3` (`PojazdID`),
+  CONSTRAINT `KlientID2` FOREIGN KEY (`KlientID`) REFERENCES `klienci` (`KlientID`),
+  CONSTRAINT `PojazdID3` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `temporaryTable` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Imie` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+Insert into temporaryTable ( Imie) values ('Jan');
+
+truncate table temporaryTable;
+
+DROP TABLE temporaryTable;
+
+CREATE INDEX `idx_czescid` ON `czesci` (`CzescID`);
+CREATE INDEX `idx_klientid` ON `klienci` (`KlientID`);
+CREATE INDEX `idx_pojazdid` ON `pojazdy` (`PojazdID`);
+CREATE INDEX `idx_pracownikid` ON `pracownicy` (`PracownikID`);
+CREATE INDEX `idx_rezerwacjaid` ON `rezerwacje` (`RezerwacjaID`);
+CREATE INDEX `idx_serwisid` ON `serwis` (`SerwisID`);
+CREATE INDEX `idx_serwisczescid` ON `serwisczesci` (`SerwiscCzescID`);
+CREATE INDEX `idx_transakcjaid` ON `transakcje` (`TransakcjaID`);
 
 -- Eksport danych został odznaczony.
 

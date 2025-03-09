@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="samochodziki">
+	<entities>
+		<data-source id="mariaDB-19539257021-218875024b3844dc">
+			<entity id="1" name="czesci" fq-name="samochodziki.czesci">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="2" name="klienci" fq-name="samochodziki.klienci">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="3" name="pojazdy" fq-name="samochodziki.pojazdy">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="4" name="pracownicy" fq-name="samochodziki.pracownicy">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="5" name="rezerwacje" fq-name="samochodziki.rezerwacje">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="6" name="serwis" fq-name="samochodziki.serwis">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="7" name="serwisczesci" fq-name="samochodziki.serwisczesci">
+				<path name="samochodziki"/>
+			</entity>
+			<entity id="8" name="transakcje" fq-name="samochodziki.transakcje">
+				<path name="samochodziki"/>
+			</entity>
+		</data-source>
+	</entities>
+	<relations>
+		<relation name="CzescID" fq-name="samochodziki.serwisczesci.CzescID" type="fk" pk-ref="1" fk-ref="7"/>
+		<relation name="KlientID1" fq-name="samochodziki.rezerwacje.KlientID1" type="fk" pk-ref="2" fk-ref="5"/>
+		<relation name="KlientID2" fq-name="samochodziki.transakcje.KlientID2" type="fk" pk-ref="2" fk-ref="8"/>
+		<relation name="PojazdID1" fq-name="samochodziki.rezerwacje.PojazdID1" type="fk" pk-ref="3" fk-ref="5"/>
+		<relation name="PojazdID2" fq-name="samochodziki.serwis.PojazdID2" type="fk" pk-ref="3" fk-ref="6"/>
+		<relation name="PojazdID3" fq-name="samochodziki.transakcje.PojazdID3" type="fk" pk-ref="3" fk-ref="8"/>
+		<relation name="PracownikID" fq-name="samochodziki.serwis.PracownikID" type="fk" pk-ref="4" fk-ref="6"/>
+		<relation name="SerwisID" fq-name="samochodziki.serwisczesci.SerwisID" type="fk" pk-ref="6" fk-ref="7"/>
+	</relations>
+</diagram>
