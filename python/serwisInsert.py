@@ -15,6 +15,7 @@ def generate_sql_file(filename, rows):
     with open(filename, 'w') as file:
         for i in range(rows):
             pojazd_id = random.randint(0,2500)
+            pracownik_id = random.randint(0,500)
             problem = random.choice(problemy)
             data_przyjecia = losowa_data(2020,2022)
             data_zakonczenia = losowa_data(2023,2024)
@@ -22,8 +23,8 @@ def generate_sql_file(filename, rows):
             status = random.choice(statusy)
             
             # Wpis do tabeli
-            file.write(f"INSERT INTO serwis (PojazdID, OpisProblemu, DataPrzyjecia, DataZakonczenia, Koszt, Status) "
-                              f"VALUES ({pojazd_id}, '{problem}', '{data_przyjecia}', '{data_zakonczenia}', {koszt}, '{status}');\n")
+            file.write(f"INSERT INTO serwis (PojazdID, PracownikID, OpisProblemu, DataPrzyjecia, DataZakonczenia, Koszt, Status) "
+                              f"VALUES ({pojazd_id}, {pracownik_id}, '{problem}', '{data_przyjecia}', '{data_zakonczenia}', {koszt}, '{status}');\n")
 
 # Wywołanie funkcji do stworzenia pliku SQL
 generate_sql_file("serwis.sql", 1000)  # Generuje 2500 wierszy
