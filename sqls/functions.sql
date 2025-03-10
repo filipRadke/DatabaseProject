@@ -19,7 +19,7 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `PrzypisaniPracownicy` AS
 SELECT p.PracownikID, p.Imie, p.Stanowisko, s.SerwisID FROM pracownicy p
 JOIN serwis s WHERE s.PracownikID = p.PracownikID;
 
-ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `klientrezerwacje` AS 
+ALTER ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `klientrezerwacje` AS 
 SELECT k.KlientID, k.Imie, COUNT(r.RezerwacjaID) FROM klienci k
 JOIN rezerwacje r WHERE r.KlientID = k.KlientID
 GROUP BY k.KlientID;

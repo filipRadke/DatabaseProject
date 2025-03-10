@@ -150,17 +150,31 @@ CREATE TABLE IF NOT EXISTS `transakcje` (
   CONSTRAINT `PojazdID3` FOREIGN KEY (`PojazdID`) REFERENCES `pojazdy` (`PojazdID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE IF NOT EXISTS `temporaryTable` (
+CREATE TABLE IF NOT EXISTS `tymczasowaTabela` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Sekwencja` int(11) DEFAULT NULL,
   `Imie` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-Insert into temporaryTable ( Imie) values ('Jan');
+CREATE SEQUENCE sekwencjaTest
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1
+MAXVALUE 5
+CYCLE;
 
-truncate table temporaryTable;
+-- Insert 6 records into the tymczasowaTabela
+INSERT INTO tymczasowaTabela (Sekwencja, Imie) VALUES (NEXT VALUE FOR sekwencjaTest, 'Jan');
+INSERT INTO tymczasowaTabela (Sekwencja, Imie) VALUES (NEXT VALUE FOR sekwencjaTest, 'Anna');
+INSERT INTO tymczasowaTabela (Sekwencja, Imie) VALUES (NEXT VALUE FOR sekwencjaTest, 'Piotr');
+INSERT INTO tymczasowaTabela (Sekwencja, Imie) VALUES (NEXT VALUE FOR sekwencjaTest, 'Ewa');
+INSERT INTO tymczasowaTabela (Sekwencja, Imie) VALUES (NEXT VALUE FOR sekwencjaTest, 'Krzysztof');
+INSERT INTO tymczasowaTabela (Sekwencja, Imie) VALUES (NEXT VALUE FOR sekwencjaTest, 'Magdalena');
 
-DROP TABLE temporaryTable;
+truncate table tymczasowaTabela;
+
+DROP TABLE tymczasowaTabela;
 
 CREATE INDEX `idx_czescid` ON `czesci` (`CzescID`);
 CREATE INDEX `idx_klientid` ON `klienci` (`KlientID`);
@@ -170,6 +184,32 @@ CREATE INDEX `idx_rezerwacjaid` ON `rezerwacje` (`RezerwacjaID`);
 CREATE INDEX `idx_serwisid` ON `serwis` (`SerwisID`);
 CREATE INDEX `idx_serwisczescid` ON `serwisczesci` (`SerwiscCzescID`);
 CREATE INDEX `idx_transakcjaid` ON `transakcje` (`TransakcjaID`);
+
+--user admin
+CREATE USER 'admin'@'%' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
+-- user manager
+CREATE USER 'manager'@'%' IDENTIFIED BY 'manager123';
+GRANT SELECT ON `samochodziki`.`PrzypisaniPracownicy` TO 'manager'@'%';
+GRANT SELECT ON `samochodziki`.`klientrezerwacje` TO 'manager'@'%';
+GRANT SELECT ON `samochodziki`.`klienci` TO 'manager'@'%';
+GRANT SELECT ON `samochodziki`.`rezerwacje` TO 'manager'@'%';
+GRANT ALL PRIVILEGES ON `samochodziki`.`serwis` TO 'manager'@'%';
+-- user mechanik
+CREATE USER 'mechanik'@'%' IDENTIFIED BY 'mechanik123';
+GRANT SELECT, UPDATE ON `samochodziki`.`serwis` TO 'mechanik'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE ON `samochodziki`.`serwisczesci` TO 'mechanik'@'%';
+-- user ksiegowa
+CREATE USER 'ksiegowa'@'%' IDENTIFIED BY 'ksiegowa123';
+GRANT SELECT, INSERT, UPDATE, DELETE ON `samochodziki`.`transakcje` TO 'ksiegowa'@'%';
+-- user klient
+CREATE USER 'klient'@'%' IDENTIFIED BY 'klient123';
+GRANT SELECT, UPDATE ON `samochodziki`.`rezerwacje` TO 'klient'@'%';
+GRANT SELECT, UPDATE ON `samochodziki`.`transakcje` TO 'klient'@'%';
+-- user janusz
+CREATE USER 'janusz'@'%' IDENTIFIED BY 'janusz123';
+
+FLUSH PRIVILEGES;
 
 -- Eksport danych został odznaczony.
 
